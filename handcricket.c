@@ -142,7 +142,15 @@ void playInnings(bool isUserBatting) {
         if (innings == 1) {
             int result = win(target, totalruns);
             // FIXED: win() never returns 0, so removed result == 0 condition
-            if (result == 1 || result == 2) {
+            if (result == 1 ){
+                matchSummary();
+                return;
+            }else if(i == balls -1){
+                if(totalruns == target){
+                    matchSummary();
+                    return;
+                }
+            }else {
                 matchSummary();
                 return;
             }

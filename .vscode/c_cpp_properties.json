@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "C:\\mingw64\\include",
                 "C:\\mingw64\\include\\c++\\13.2.0",
-                "C:\\mingw64\\x86_64-w64-mingw32\\include"
+                "C:\\mingw64\\x86_64-w64-mingw32\\include",
+                "include"
             ],
             "defines": [
                 "_DEBUG",
