@@ -6,11 +6,16 @@
       "type": "shell",
       "command": "gcc",
       "args": [
-        "test.c",
+        "main.c",
+        "game.c",
+        "toss_screen.c",
+        "choose_bat_ball.c",
         "-o",
-        "output/test.exe",
-        "-Iinclude",        // Path to raylib.h
-        "-Llib",            // Path to raylib.a or raylib.dll.a
+        "handcricket.exe",
+        "-I",
+       "E:/Study Material/C/C project/handCricket/include",
+       "-L",
+       "E:/Study Material/C/C project/handCricket/lib", 
         "-lraylib",
         "-lopengl32",
         "-lgdi32",
