@@ -1,13 +1,14 @@
 #ifndef TOSS_SCREEN_H
 #define TOSS_SCREEN_H
 
-#include "raylib.h"
 #include "game.h"
-
+#include "stdlib.h"
+#include "raylib.h"
+#include <time.h>
 extern bool isUserWonToss;
+extern bool isComputerTurn;
 void InitTossScreen(void);
-void UpdateTossScreen(GameState *currentState);
+void UpdateTossScreen(GameState *state);
 void DrawTossScreen(void);
 
-
-#endif
+#endif // TOSS_SCREEN_H

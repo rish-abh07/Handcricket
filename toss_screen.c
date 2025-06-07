@@ -1,11 +1,12 @@
 #include "toss_screen.h"
+#include "choose_bat_ball.h"
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>  // for strcmp
 #include <math.h>    // for cosf, fabsf, DEG2RAD
 
 bool isUserWonToss = false;
-
+bool isComputerTurn= false;
 static Vector2 headCenter = {250, 300};
 static Vector2 tailCenter = {450, 300};
 static float coinRadius = 50.0f;
@@ -67,13 +68,18 @@ void UpdateTossScreen(GameState* state) {
 
             bool userChoseHeads = (strcmp(userChoiceText, "You chose Heads") == 0);
             isUserWonToss = userChoseHeads ? (tossResult == 0) : (tossResult == 1);
-
             isAnimating = false;
             tossDone = true;
         }
     }
 
     if (tossDone && IsKeyPressed(KEY_ENTER)) {
+         if(isUserWonToss){
+        InitChooseBatBall(false); // User won toss, they choose Bat or Ball
+        }
+        else {
+            InitChooseBatBall(true); // Computer chooses Bat or Ball
+        }
         *state = STATE_BAT_BOWL;
     }
 }

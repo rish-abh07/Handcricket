@@ -1,10 +1,15 @@
-#ifndef BAT_BALL_SCREEN_H
-#define BAT_BALL_SCREEN_H
+#ifndef CHOOSE_BAT_BALL_H
+#define CHOOSE_BAT_BALL_H
 
-#include "raylib.h"
 #include "game.h"
+#include <stdlib.h>
+#include "raylib.h"
+#include <time.h>
+#include <string.h>
 
-void InitChooseBatBall(void);
-void UpdateChooseBatBall(GameState *state) ;
+void InitChooseBatBall(bool isComputerTurn);
+void UpdateChooseBatBall(GameState *state);
 void DrawChooseBatBallScreen(void);
-#endif
+void UnloadChooseBatBall(void);
+
+#endif // CHOOSE_BAT_BALL_H

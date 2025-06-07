@@ -11,7 +11,7 @@ void InitGame(void) {
     SetTargetFPS(60);  // Set target FPS for smoother rendering
     currentState = STATE_TOSS;
     InitTossScreen();
-    InitChooseBatBall();
+   // Initialize with user not winning toss
 }
 
     void UpdateGame(){
