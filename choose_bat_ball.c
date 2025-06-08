@@ -1,6 +1,6 @@
 #include "choose_bat_ball.h"
 #include "toss_screen.h"
-
+#include "play_screen.h"
 
 static const char *computerChoice = NULL;
 
@@ -13,13 +13,13 @@ static float choiceRadius = 50.0f;
 
 static bool choiceDone = false;
 static const char *choiceText = NULL;
-
+static bool isUserBat = false;
 static Texture2D batTexture;
 static Texture2D ballTexture;
 
 
 void InitChooseBatBall(bool isComputerTurn) {
-     choiceDone = false;
+    choiceDone = false;
     choiceText = NULL;
 
    
@@ -28,9 +28,11 @@ void InitChooseBatBall(bool isComputerTurn) {
         if (rand() % 2 == 0) {
             computerChoice = "Bat";
             batCenter.x += 100; // Move bat right for display
+            isUserBat = false; // Computer chose Bat
         } else {
             computerChoice = "Ball";
             ballCenter.x -= 100; // Move ball left for display
+            isUserBat = true; // Computer chose Ball
         }
         computerTurn = true ;
         choiceDone = true; // Choice made by computer automatically
@@ -69,16 +71,19 @@ void UpdateChooseBatBall(GameState *state) {
 
                 if ((dx1 * dx1 + dy1 * dy1) <= (choiceRadius * choiceRadius)) {
                     choiceText = "You chose Bat";
+                    isUserBat = true; // User chose Bat
                     choiceDone = true;
                 } else if ((dx2 * dx2 + dy2 * dy2) <= (choiceRadius * choiceRadius)) {
                     choiceText = "You chose Ball";
+                    isUserBat = false; // User chose Ball
                     choiceDone = true;
                 }
             }
     }
 
     if (choiceDone && IsKeyPressed(KEY_ENTER)) {
-        //*state = STATE_START_MATCH;  // Transition to the play state
+        *state = STATE_PLAY;  // Transition to the play state
+        InitPlayScreen(isUserBat); // Pass the turn based on who chose
     }
 }
 void DrawChooseBatBallScreen(void) {
@@ -90,7 +95,7 @@ void DrawChooseBatBallScreen(void) {
                 DrawCircleV(batCenter, choiceRadius, MAROON);
                 DrawTextureV(batTexture, (Vector2){batCenter.x - batTexture.width/2, batCenter.y - batTexture.height/2},  WHITE);
             } else if(strcmp(computerChoice, "Ball") == 0) {
-                DrawText("Bat", 220, 150, 20, MAROON);
+                DrawText("Ball", 220, 150, 20, MAROON);
                 DrawCircleV(ballCenter, choiceRadius, BLUE);
                 DrawTextureV(ballTexture, (Vector2){ballCenter.x - ballTexture.width/2, ballCenter.y - ballTexture.height/2}, WHITE);
             }
