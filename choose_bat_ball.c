@@ -110,6 +110,13 @@ void DrawChooseBatBallScreen(void) {
                 DrawTextureV(ballTexture, (Vector2){ballCenter.x - ballTexture.width/2, ballCenter.y - ballTexture.height/2}, WHITE);
             } 
             else {
+                if(strcmp(choiceText, "You chose Bat") == 0) {
+                    DrawCircleV(batCenter, choiceRadius, MAROON);
+                    DrawTextureV(batTexture, (Vector2){batCenter.x - batTexture.width/2, batCenter.y - batTexture.height/2}, WHITE);
+                } else if(strcmp(choiceText, "You chose Ball") == 0) {
+                    DrawCircleV(ballCenter, choiceRadius, BLUE);
+                    DrawTextureV(ballTexture, (Vector2){ballCenter.x - ballTexture.width/2, ballCenter.y - ballTexture.height/2}, WHITE);
+                }
                 DrawText(choiceText, 220, 375, 20, MAROON);
                 DrawText("Press ENTER to continue", 220, 425, 20, DARKGRAY);
             }
