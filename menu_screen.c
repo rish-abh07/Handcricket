@@ -2,28 +2,22 @@
 #include "globalsVar.h"
 #include "raylib.h"
 #include "math.h"
+#include <stdlib.h>
 
-float buttonWidth = 200;
+float buttonWidth = 300;
 float buttonHeight = 40;
 int buttonGap = 20;
 
-static Rectangle startButton = { 300, 250, 200, 40};
-static Rectangle leaderBoardButton = {300, 300, 200, 40};
-static Rectangle settingButton = {300, 350, 200, 40};
-static Rectangle howToPlayButton = { 300, 400, 200, 40 };
+static Rectangle startButton = { 300, 250, 300, 40};
+static Rectangle leaderBoardButton = {300, 300, 300, 40};
+static Rectangle settingButton = {300, 350, 300, 40};
+static Rectangle howToPlayButton = { 300, 400, 300, 40 };
 static Texture2D backgroundTexture;
 
-// hoverColors
-    Color hoverStart = (Color){32, 191, 90, 255};
-    Color hoverLeader = (Color){ 41, 104, 237,255};
-    Color hoverSetting = (Color){149, 55, 235, 255} ; 
-    Color hoverExit = (Color){237, 93, 14, 255} ;
+//headinDesign
 
-     //buttonColor
-     Color startButtonColor = (Color){32, 191, 90, 230};
-     Color leaderBoardButtonColor = (Color){ 41, 104, 237, 230};
-     Color settingButtonColor = (Color){149, 55, 235, 230};
-     Color howToPlayButtonColor = (Color){ 237, 93, 14, 230};
+Font montserrat;
+
 
 
 void InitMenuScreen(){
@@ -33,6 +27,9 @@ void InitMenuScreen(){
     settingButton.x = (screenWidth - buttonWidth)/2;
     howToPlayButton.x = (screenWidth - buttonWidth)/2;
     //toload textures and menu
+    //toloadFont
+     montserrat = LoadFontFromMemory(".otf",Montserrat_ExtraBold_otf, Montserrat_ExtraBold_otf_len, 40, NULL, 0);
+     SetTextureFilter(montserrat.texture, TEXTURE_FILTER_POINT); 
 }
 
 void btnTextCentered(char *btntext, int x, int y, float width, float height,  int fontSize ,Color color){
@@ -42,25 +39,35 @@ void btnTextCentered(char *btntext, int x, int y, float width, float height,  in
     DrawText(btntext, textX, textY, fontSize, color);
 
 }
-void hoverSize(Rectangle button, Color hoverColor, int fontSize, char *btnText, Color fontColor){
-    float scale = CheckCollisionPointRec(GetMousePosition(), button) ? 1.2f : 1.0f;
-    
+void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSize, char *btnText, Color fontColor){
+ 
+      bool isHovered = CheckCollisionPointRec(GetMousePosition(), button);
+
+    float scale = isHovered ? 1.2f : 1.0f;
+    Color showColor = isHovered ? hoverColor : normalColor;
+
     float newWidth = button.width * scale;
     float newHeight = button.height * scale;
-    float newX = button.x - (newWidth - button.width)/2;
-    float newY = button.y - (newHeight - button.height)/2;
-    
-    DrawRectangleRounded((Rectangle){ newX, newY, newWidth, newHeight},0.3f,10, hoverColor);
-    btnTextCentered(btnText, newX,newY, newWidth, newHeight, fontSize, fontColor);
-   
-    
+    float newX = button.x - (newWidth - button.width) / 2;
+    float newY = button.y - (newHeight - button.height) / 2;
+
+    if (isHovered) {
+        DrawRectangleRounded((Rectangle){ newX, newY, newWidth, newHeight }, 0.3f, 10, showColor);
+        btnTextCentered(btnText, newX, newY, newWidth, newHeight, fontSize, fontColor);
+    } else {
+        DrawRectangleRounded(button, 0.3f, 10, showColor);
+        btnTextCentered(btnText, button.x, button.y, button.width, button.height, fontSize, fontColor);
+    }
 }
 void UpdateMenuScreen(GameState *state)
 {
     Vector2 mouse = GetMousePosition();
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         if (CheckCollisionPointRec(mouse, startButton)) {
+
+            UnloadFont(montserrat);
             *state = STATE_TOSS; // Transition to toss state
+
         } else if (CheckCollisionPointRec(mouse, howToPlayButton)) {
             CloseWindow(); // Exit the game
         }
@@ -89,25 +96,30 @@ void DrawMenuScreen(int screenWidth, int screenHeight)
                    0.0f,
                    WHITE);
 
-    DrawText("HAND CRICKET", 270, 150, 40, DARKBLUE);
-    hoverSize(startButton, hoverStart, 20, "NEW GAME", WHITE);
-    hoverSize(leaderBoardButton, hoverLeader, 20, "LEADERBOARD", WHITE);
-    hoverSize(settingButton, hoverSetting, 20, "SETTING", WHITE);
-    hoverSize(howToPlayButton, hoverExit, 20, "HOW TO PLAY", WHITE);
+    // hoverColors
+    Color hoverStart = (Color){32, 191, 90, 255};
+    Color hoverLeader = (Color){ 41, 104, 237,255};
+    Color hoverSetting = (Color){149, 55, 235, 255} ; 
+    Color hoverExit = (Color){237, 93, 14, 255} ;
 
-    
-    // Draw buttons with centered text
-    DrawRectangleRounded(startButton,0.3,10, startButtonColor);
-    btnTextCentered("NEW GAME", startButton.x, startButton.y, startButton.width, startButton.height, 20, WHITE);
+     //buttonColor
+     Color startButtonColor = (Color){32, 191, 90, 230};
+     Color leaderBoardButtonColor = (Color){ 41, 104, 237, 230};
+     Color settingButtonColor = (Color){149, 55, 235, 230};
+     Color howToPlayButtonColor = (Color){ 237, 93, 14, 230};
 
-    DrawRectangleRounded(leaderBoardButton,0.3,10, leaderBoardButtonColor);
-    btnTextCentered("LEADERBOARD", leaderBoardButton.x, leaderBoardButton.y, leaderBoardButton.width, leaderBoardButton.height, 20, WHITE);
+     Vector2 textSize = MeasureTextEx(montserrat, "HAND CRICKET", 40,1);
+     Vector2 titlePosition = {(screenWidth - textSize.x)/2,startButton.y - 100};
+     DrawTextEx(montserrat,"HAND CRICKET", titlePosition, 40,1, WHITE);
+    int subHeadSize = MeasureText("The Ultimate Finger Game", 20); // match font size to DrawText
+    float subHeadX = titlePosition.x + (textSize.x - subHeadSize)/2;
+    DrawText("The Ultimate Finger Game", subHeadX, titlePosition.y + 50, 20, YELLOW);
 
-    DrawRectangleRounded(settingButton,0.3,10, settingButtonColor);
-    btnTextCentered("SETTING", settingButton.x, settingButton.y, settingButton.width, settingButton.height, 20, WHITE);
 
-    DrawRectangleRounded(howToPlayButton,0.3,10, howToPlayButtonColor);
-    btnTextCentered("HOW TO PLAY", howToPlayButton.x, howToPlayButton.y, howToPlayButton.width, howToPlayButton.height, 20, WHITE);
+    hoverSize(startButton, startButtonColor,hoverStart, 20, "NEW GAME", WHITE);
+    hoverSize(leaderBoardButton, leaderBoardButtonColor,hoverLeader, 20, "LEADERBOARD", WHITE);
+    hoverSize(settingButton, settingButtonColor,hoverSetting, 20, "SETTING", WHITE);
+    hoverSize(howToPlayButton, howToPlayButtonColor,hoverExit, 20, "HOW TO PLAY", WHITE);
 }
 void UnloadMenuScreen() {
     UnloadTexture(backgroundTexture); // Unload the background texture

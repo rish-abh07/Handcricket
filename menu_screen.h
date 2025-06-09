@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "game.h"
 #include "globalsVar.h"
+#include "Montserrat_ExtraBold.h"
+
 
 void InitMenuScreen();
 void UpdateMenuScreen(GameState *state);

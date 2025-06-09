@@ -12,6 +12,7 @@
         "choose_bat_ball.c",
         "play_screen.c",
         "menu_screen.c",
+        "resource/Montserrat_ExtraBold.c",
         "-o",
         "handcricket.exe",
         "-I",

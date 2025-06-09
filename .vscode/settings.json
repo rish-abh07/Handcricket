@@ -5,6 +5,7 @@
         "raylib.h": "c",
         "toss_screen.h": "c",
         "globalsvar.h": "c",
-        "menu_screen.h": "c"
+        "menu_screen.h": "c",
+        "montserrat_extrabold.h": "c"
     }
 }
