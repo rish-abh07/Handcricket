@@ -2,6 +2,7 @@
 #define GAME_H
 
 typedef enum {
+    STATE_MENU,
     STATE_TOSS,
     STATE_BAT_BOWL,
     STATE_PLAY,

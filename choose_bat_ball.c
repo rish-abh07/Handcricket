@@ -83,6 +83,8 @@ void UpdateChooseBatBall(GameState *state) {
 
     if (choiceDone && IsKeyPressed(KEY_ENTER)) {
         *state = STATE_PLAY;  // Transition to the play state
+        UnloadChooseBatBall(); // Unload textures before transitioning
+        // Initialize play screen with the user's choice
         InitPlayScreen(isUserBat); // Pass the turn based on who chose
     }
 }

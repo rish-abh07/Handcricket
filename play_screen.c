@@ -5,6 +5,11 @@
 
 #define NUM_BUTTONS 6
 #define BALLS_PER_INNINGS 6
+#define MAX_HAND_CHOICES 7 // 1-6 + 0
+
+static Texture2D handTextures[MAX_HAND_CHOICES]; // 0 to 6
+static Texture2D *currentUserHand = NULL;
+static Texture2D *currentComputerHand = NULL;
 
 Rectangle buttons[NUM_BUTTONS];
 Rectangle userChoiceRecord[BALLS_PER_INNINGS];
@@ -53,6 +58,21 @@ bool isWicket(int shot, int ball) {
     return shot == ball;
 }
 
+void HandtextureLoad(int choice, bool isUser) {
+    if (choice < 0 || choice > 6) choice = 0;
+    if (isUser) {
+        currentUserHand = &handTextures[choice];
+    } else {
+        currentComputerHand = &handTextures[choice];
+    }
+}
+
+void UnloadHandTextures() {
+    for (int i = 0; i < MAX_HAND_CHOICES; i++) {
+        UnloadTexture(handTextures[i]);
+    }
+}
+
 void InitPlayScreen(bool userBatFirst) {
     screenMessage = "Play!";
     isUserBatting = userBatFirst;
@@ -71,6 +91,26 @@ void InitPlayScreen(bool userBatFirst) {
     InitButtons();
     InituserChoiceRecord();
     InitComputerChoiceRecord();
+
+    const char *textureFiles[MAX_HAND_CHOICES] = {
+        "asset/zero.png",  // index 0
+        "asset/One.png",   // index 1
+        "asset/two.png",   // index 2
+        "asset/three.png", // index 3
+        "asset/four.png",  // index 4
+        "asset/five.png",  // index 5
+        "asset/six .png"   // index 6
+    };
+
+    for (int i = 0; i < MAX_HAND_CHOICES; i++) {
+        handTextures[i] = LoadTexture(textureFiles[i]);
+    }
+
+    currentUserHand = &handTextures[0];
+    currentComputerHand = &handTextures[0];
+    if (handTextures[0].id == 0) {
+        TraceLog(LOG_ERROR, "Failed to load hand textures!");
+    }    
 }
 
 void ballRecordReset(int *record, int size) {
@@ -87,6 +127,8 @@ void HandleUserChoice(int userChoice) {
     if (isUserBatting) {
         userBallRecord[currentBall] = userChoice;
         computerBallRecord[currentBall] = computerChoice;
+        HandtextureLoad(userChoice, true);
+        HandtextureLoad(computerChoice, false);
 
         if (isWicket(userChoice, computerChoice)) {
             if (isFirstInnings) {
@@ -94,9 +136,16 @@ void HandleUserChoice(int userChoice) {
                 isUserBatting = false;
                 isFirstInnings = false;
                 target = userScore;
+
                 currentBall = 0;
                 ballRecordReset(userBallRecord, BALLS_PER_INNINGS);
                 ballRecordReset(computerBallRecord, BALLS_PER_INNINGS);
+
+                userScore = 0;
+                computerScore = 0;
+
+                currentUserHand = &handTextures[0];
+                currentComputerHand = &handTextures[0];
             } else {
                 screenMessage = "You are OUT!";
                 matchOver = true;
@@ -121,9 +170,16 @@ void HandleUserChoice(int userChoice) {
                 isUserBatting = false;
                 isFirstInnings = false;
                 target = userScore;
+
                 currentBall = 0;
                 ballRecordReset(userBallRecord, BALLS_PER_INNINGS);
                 ballRecordReset(computerBallRecord, BALLS_PER_INNINGS);
+
+                userScore = 0;
+                computerScore = 0;
+
+                currentUserHand = &handTextures[0];
+                currentComputerHand = &handTextures[0];
             } else {
                 // Second innings ends, decide winner
                 if (userScore == target) {
@@ -140,6 +196,8 @@ void HandleUserChoice(int userChoice) {
     } else { // computer is batting
         userBallRecord[currentBall] = userChoice;
         computerBallRecord[currentBall] = computerChoice;
+        HandtextureLoad(userChoice, true);
+        HandtextureLoad(computerChoice, false);
 
         if (isWicket(computerChoice, userChoice)) {
             if (isFirstInnings) {
@@ -147,7 +205,16 @@ void HandleUserChoice(int userChoice) {
                 isUserBatting = true;
                 isFirstInnings = false;
                 target = computerScore;
+
                 currentBall = 0;
+                ballRecordReset(userBallRecord, BALLS_PER_INNINGS);
+                ballRecordReset(computerBallRecord, BALLS_PER_INNINGS);
+
+                userScore = 0;
+                computerScore = 0;
+
+                currentUserHand = &handTextures[0];
+                currentComputerHand = &handTextures[0];
             } else {
                 screenMessage = "Computer OUT!";
                 matchOver = true;
@@ -172,7 +239,16 @@ void HandleUserChoice(int userChoice) {
                 isUserBatting = true;
                 isFirstInnings = false;
                 target = computerScore;
+
                 currentBall = 0;
+                ballRecordReset(userBallRecord, BALLS_PER_INNINGS);
+                ballRecordReset(computerBallRecord, BALLS_PER_INNINGS);
+
+                userScore = 0;
+                computerScore = 0;
+
+                currentUserHand = &handTextures[0];
+                currentComputerHand = &handTextures[0];
             } else {
                 // Second innings ends, decide winner
                 if (computerScore == target) {
@@ -229,4 +305,7 @@ void DrawPlayScreen() {
 
     if (!isFirstInnings)
         DrawText(TextFormat("Target: %d", target + 1), 300, 180, 20, ORANGE);
+
+    if (currentUserHand) DrawTexture(*currentUserHand, 150, 400, WHITE);
+    if (currentComputerHand) DrawTexture(*currentComputerHand, 550, 400, WHITE);
 }

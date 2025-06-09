@@ -11,6 +11,7 @@
         "toss_screen.c",
         "choose_bat_ball.c",
         "play_screen.c",
+        "menu_screen.c",
         "-o",
         "handcricket.exe",
         "-I",
