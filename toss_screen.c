@@ -4,6 +4,8 @@
 #include <time.h>
 #include <string.h>  // for strcmp
 #include <math.h>    // for cosf, fabsf, DEG2RAD
+#include "Montserrat_Fonts.h"
+#include "globalsVar.h"
 
 bool isUserWonToss = false;
 bool isComputerTurn= false;
@@ -21,11 +23,20 @@ static float animationSpeed = 720.0f; // degrees per second
 static float animationTime = 0.0f;
 static float animationDuration = 1.0f; // seconds
 static bool isAnimating = false;
+static Rectangle HeadBtn = { 100,100,100,40};
 
+static Rectangle smallBackgroundRect={ 250, 250, 400, 300 };
+Color smallBackgroundRectColor = (Color){104, 50, 146, 255};
 void InitTossScreen(void) {
     tossDone = false;
     tossResult = -1;
-   
+    smallBackgroundRect.width = GetScreenWidth()/2.5;
+    smallBackgroundRect.height = GetScreenHeight()/2.5;
+    smallBackgroundRect.x = (GetScreenWidth()-smallBackgroundRect.width)/2;
+    smallBackgroundRect.y = (GetScreenHeight()-smallBackgroundRect.height)/2;
+    HeadBtn.width = smallBackgroundRect.width/3;
+    HeadBtn.x = smallBackgroundRect.x + (smallBackgroundRect.width/2 - HeadBtn.width)/2;
+    HeadBtn.y = smallBackgroundRect.y + (smallBackgroundRect.height - HeadBtn.height)*0.90; 
     userChoiceText = NULL;
     isAnimating = false;
     animationTime = 0.0f;
@@ -84,8 +95,14 @@ void UpdateTossScreen(GameState* state) {
     }
 }
 
-void DrawTossScreen() {
-    DrawText("Choose Heads or Tails", 220, 100, 24, DARKBLUE);
+void DrawTossScreen(int screenWidth, int screenHeight) {
+    DrawRectangleRounded(smallBackgroundRect, 0.1, 10, smallBackgroundRectColor);
+    Vector2 textSize = MeasureTextEx(montserratTitle, "TOSS TIME", 40,1);
+    Vector2 titlePosition = {(screenWidth - textSize.x)/2,smallBackgroundRect.y - 100};
+    DrawTextEx(montserratTitle,"TOSS TIME", titlePosition, 40,1, WHITE);
+    Vector2 subHeadSize = MeasureTextEx(subHeadLight,"Choose Head or Tail", 20,0); // match font size to DrawText
+    float subHeadX = titlePosition.x + (textSize.x - subHeadSize.x)/2;
+    DrawTextEx(subHeadLight,"Choose Head or Tail",(Vector2){ subHeadX, titlePosition.y + 50}, 20,0, YELLOW);
 
     if (!tossDone) {
         if (isAnimating) {
@@ -106,6 +123,7 @@ void DrawTossScreen() {
                 DrawText(faceText, coin.x + coinRadius - 20, coin.y + coinRadius * scaleY - 10, 20, BLACK);
             }
         } else {
+            DrawRectangleRounded(HeadBtn,0.1f,5,DARKBLUE);
             DrawCircleV(headCenter, coinRadius, GOLD);
             DrawText("Heads", headCenter.x - 20, headCenter.y - 10, 20, BLACK);
             DrawCircleV(tailCenter, coinRadius, GRAY);

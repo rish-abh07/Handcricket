@@ -14,27 +14,17 @@ static Rectangle settingButton = {300, 350, 300, 40};
 static Rectangle howToPlayButton = { 300, 400, 300, 40 };
 static Texture2D backgroundTexture;
 
-//headinDesign
-
-Font montserratTitle;
-Font subHeadLight;
-Font buttonFontMedium;
 
 
 MenuIcons menuIcon;
 
 void InitMenuScreen(){
-    backgroundTexture = LoadTexture("asset/menu_background.png");
     startButton.x = (screenWidth - buttonWidth)/2;
     leaderBoardButton.x = (screenWidth - buttonWidth)/2;
     settingButton.x = (screenWidth - buttonWidth)/2;
     howToPlayButton.x = (screenWidth - buttonWidth)/2;
-    //toload textures and menu
-    //toloadFont
-     montserratTitle = LoadFontFromMemory(".otf",Montserrat_ExtraBold_otf, Montserrat_ExtraBold_otf_len, 40, NULL, 0);
-     SetTextureFilter(montserratTitle.texture, TEXTURE_FILTER_POINT);
-     subHeadLight = LoadFontFromMemory(".otf", Montserrat_Light_otf, Montserrat_Light_otf_len , 20,NULL,0);
-     buttonFontMedium = LoadFontFromMemory(".otf", Montserrat_Medium_otf, Montserrat_Medium_otf_len , 20,NULL,0);
+    
+   
      
      //icon load
      menuIcon.play = LoadTexture("asset/play.png");
@@ -86,7 +76,6 @@ void UpdateMenuScreen(GameState *state)
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         if (CheckCollisionPointRec(mouse, startButton)) {
 
-            UnloadFont(montserratTitle);
             *state = STATE_TOSS; // Transition to toss state
 
         } else if (CheckCollisionPointRec(mouse, howToPlayButton)) {
@@ -99,24 +88,7 @@ void DrawMenuScreen(int screenWidth, int screenHeight)
 {
      ClearBackground(BLACK); // Optional fallback background
 
-    // Calculate scale to preserve aspect ratio (letterbox/pillarbox logic)
-    float scale = fminf((float)screenWidth / backgroundTexture.width,
-                        (float)screenHeight / backgroundTexture.height);
-
-    Rectangle dest = {
-        (screenWidth - backgroundTexture.width * scale) / 2,
-        (screenHeight - backgroundTexture.height * scale) / 2,
-        backgroundTexture.width * scale,
-        backgroundTexture.height * scale
-    };
-
-    DrawTexturePro(backgroundTexture,
-                   (Rectangle){ 0, 0, backgroundTexture.width, backgroundTexture.height },
-                   dest,
-                   (Vector2){ 0, 0 },
-                   0.0f,
-                   WHITE);
-
+   
     // hoverColors
     Color hoverStart = (Color){32, 191, 90, 255};
     Color hoverLeader = (Color){ 41, 104, 237,255};
@@ -143,7 +115,7 @@ void DrawMenuScreen(int screenWidth, int screenHeight)
     hoverSize(howToPlayButton, howToPlayButtonColor,hoverExit, 20, "HOW TO PLAY", WHITE, buttonFontMedium,0, menuIcon.howToPlay);
 }
 void UnloadMenuScreen() {
-    UnloadTexture(backgroundTexture);
+   
     UnloadTexture(menuIcon.play);
     UnloadTexture(menuIcon.leaderboard);
     UnloadTexture(menuIcon.settings);

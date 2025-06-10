@@ -9,6 +9,6 @@ extern bool isUserWonToss;
 extern bool isComputerTurn;
 void InitTossScreen(void);
 void UpdateTossScreen(GameState *state);
-void DrawTossScreen(void);
+void DrawTossScreen(int screenWidth, int screenHeight);
 
 #endif // TOSS_SCREEN_H
