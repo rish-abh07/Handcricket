@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include "game.h"
 #include "globalsVar.h"
-#include "Montserrat_ExtraBold.h"
+#include "Montserrat_Fonts.h"
 
 
 void InitMenuScreen();

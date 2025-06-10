@@ -13,6 +13,8 @@
         "play_screen.c",
         "menu_screen.c",
         "resource/Montserrat_ExtraBold.c",
+        "resource/montsterrat_light.c",
+        "resource/montsterrat_Medium.c",
         "-o",
         "handcricket.exe",
         "-I",

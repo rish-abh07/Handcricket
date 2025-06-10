@@ -16,7 +16,9 @@ static Texture2D backgroundTexture;
 
 //headinDesign
 
-Font montserrat;
+Font montserratTitle;
+Font subHeadLight;
+Font buttonFontMedium;
 
 
 
@@ -28,18 +30,20 @@ void InitMenuScreen(){
     howToPlayButton.x = (screenWidth - buttonWidth)/2;
     //toload textures and menu
     //toloadFont
-     montserrat = LoadFontFromMemory(".otf",Montserrat_ExtraBold_otf, Montserrat_ExtraBold_otf_len, 40, NULL, 0);
-     SetTextureFilter(montserrat.texture, TEXTURE_FILTER_POINT); 
+     montserratTitle = LoadFontFromMemory(".otf",Montserrat_ExtraBold_otf, Montserrat_ExtraBold_otf_len, 40, NULL, 0);
+     SetTextureFilter(montserratTitle.texture, TEXTURE_FILTER_POINT);
+     subHeadLight = LoadFontFromMemory(".otf", MontserratAlternates_Light_otf, MontserratAlternates_Light_otf_len , 20,NULL,0);
+     buttonFontMedium = LoadFontFromMemory(".otf", MontserratAlternates_Medium_otf, MontserratAlternates_Medium_otf_len , 20,NULL,0); 
 }
 
-void btnTextCentered(char *btntext, int x, int y, float width, float height,  int fontSize ,Color color){
-     int textWidth = MeasureText(btntext, fontSize);
-    int textX = x + (width - textWidth)/2;
-    int textY = y + (height - fontSize )/2;
-    DrawText(btntext, textX, textY, fontSize, color);
+void btnTextCentered(char *btntext, int x, int y, float width, float height,  int fontSize ,Color color, Font fontType, int spacing){
+    Vector2 textSize = MeasureTextEx(fontType,btntext, fontSize, spacing);
+    int textX = x + (width - textSize.x)/2;
+    int textY = y + (height - textSize.y )/2;
+    DrawTextEx(fontType,btntext,(Vector2){textX, textY}, fontSize, spacing,color);
 
 }
-void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSize, char *btnText, Color fontColor){
+void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSize, char *btnText, Color fontColor, Font fontType, int spacing){
  
       bool isHovered = CheckCollisionPointRec(GetMousePosition(), button);
 
@@ -53,10 +57,10 @@ void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSi
 
     if (isHovered) {
         DrawRectangleRounded((Rectangle){ newX, newY, newWidth, newHeight }, 0.3f, 10, showColor);
-        btnTextCentered(btnText, newX, newY, newWidth, newHeight, fontSize, fontColor);
+        btnTextCentered(btnText, newX, newY, newWidth, newHeight, fontSize, fontColor, fontType,  spacing);
     } else {
         DrawRectangleRounded(button, 0.3f, 10, showColor);
-        btnTextCentered(btnText, button.x, button.y, button.width, button.height, fontSize, fontColor);
+        btnTextCentered(btnText, button.x, button.y, button.width, button.height, fontSize, fontColor, fontType, spacing);
     }
 }
 void UpdateMenuScreen(GameState *state)
@@ -65,7 +69,7 @@ void UpdateMenuScreen(GameState *state)
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         if (CheckCollisionPointRec(mouse, startButton)) {
 
-            UnloadFont(montserrat);
+            UnloadFont(montserratTitle);
             *state = STATE_TOSS; // Transition to toss state
 
         } else if (CheckCollisionPointRec(mouse, howToPlayButton)) {
@@ -108,18 +112,18 @@ void DrawMenuScreen(int screenWidth, int screenHeight)
      Color settingButtonColor = (Color){149, 55, 235, 230};
      Color howToPlayButtonColor = (Color){ 237, 93, 14, 230};
 
-     Vector2 textSize = MeasureTextEx(montserrat, "HAND CRICKET", 40,1);
+     Vector2 textSize = MeasureTextEx(montserratTitle, "HAND CRICKET", 40,1);
      Vector2 titlePosition = {(screenWidth - textSize.x)/2,startButton.y - 100};
-     DrawTextEx(montserrat,"HAND CRICKET", titlePosition, 40,1, WHITE);
-    int subHeadSize = MeasureText("The Ultimate Finger Game", 20); // match font size to DrawText
-    float subHeadX = titlePosition.x + (textSize.x - subHeadSize)/2;
-    DrawText("The Ultimate Finger Game", subHeadX, titlePosition.y + 50, 20, YELLOW);
+     DrawTextEx(montserratTitle,"HAND CRICKET", titlePosition, 40,1, WHITE);
+    Vector2 subHeadSize = MeasureTextEx(subHeadLight,"The Ultimate Finger Game", 20,0); // match font size to DrawText
+    float subHeadX = titlePosition.x + (textSize.x - subHeadSize.x)/2;
+    DrawTextEx(subHeadLight,"The Ultimate Finger Game",(Vector2){ subHeadX, titlePosition.y + 50}, 20,0, YELLOW);
 
 
-    hoverSize(startButton, startButtonColor,hoverStart, 20, "NEW GAME", WHITE);
-    hoverSize(leaderBoardButton, leaderBoardButtonColor,hoverLeader, 20, "LEADERBOARD", WHITE);
-    hoverSize(settingButton, settingButtonColor,hoverSetting, 20, "SETTING", WHITE);
-    hoverSize(howToPlayButton, howToPlayButtonColor,hoverExit, 20, "HOW TO PLAY", WHITE);
+    hoverSize(startButton, startButtonColor,hoverStart, 20, "NEW GAME", WHITE, buttonFontMedium, 0);
+    hoverSize(leaderBoardButton, leaderBoardButtonColor,hoverLeader, 20, "LEADERBOARD", WHITE, buttonFontMedium,0);
+    hoverSize(settingButton, settingButtonColor,hoverSetting, 20, "SETTING", WHITE, buttonFontMedium,0);
+    hoverSize(howToPlayButton, howToPlayButtonColor,hoverExit, 20, "HOW TO PLAY", WHITE, buttonFontMedium,0);
 }
 void UnloadMenuScreen() {
     UnloadTexture(backgroundTexture); // Unload the background texture
