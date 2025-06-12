@@ -70,7 +70,7 @@ void UpdateChooseBatBall(GameState *state) {
                 isUserBat = true;
             }
             choiceDone = true;
-            StartFade(&fade, 1.0f, false); // Start fade out after computer finishes choice
+          //  StartFade(&fade, 1.0f, false); // Start fade out after computer finishes choice
         } else {
             animationHighlightToggle = fmod(choiceAnimationTime, 0.4f) < 0.2f ? 0 : 1;
         }
@@ -84,20 +84,21 @@ void UpdateChooseBatBall(GameState *state) {
                 choiceText = "You chose Bat";
                 isUserBat = true;
                 choiceDone = true;
-                StartFade(&fade, 1.0f, false); // Start fade out immediately
+               // StartFade(&fade, 1.0f, false); // Start fade out immediately
             } else if (CheckCollisionPointRec(mousePos, ballBtn) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 choiceText = "You chose Ball";
                 isUserBat = false;
                 choiceDone = true;
-                StartFade(&fade, 1.0f, false); // Start fade out immediately
+                //StartFade(&fade, 1.0f, false); // Start fade out immediately
             }
         }
     }
 
     // Transition after fade out
-    if (choiceDone && fade.done && !fade.fadeIn) {
+    if (choiceDone ){//&& fade.done && !fade.fadeIn) {
         *state = STATE_PLAY;
-        StartFade(&fade, 1.0f, true);  // Fade in next screen
+        //InitFade(&fade);
+       // StartFade(&fade, 1.0f, true);  // Fade in next screen
         UnloadChooseBatBall();
         InitPlayScreen(isUserBat);
     }

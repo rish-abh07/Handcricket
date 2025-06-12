@@ -12,7 +12,7 @@ typedef struct {
 } FadeEffect;
 
 extern FadeEffect fade;
-
+void InitFade(FadeEffect *fade);
 void StartFade(FadeEffect *fade, float duration, bool fadeIn);
 void UpdateFade(FadeEffect *fade);
 void DrawFade(FadeEffect *fade);

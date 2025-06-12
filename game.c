@@ -28,10 +28,11 @@ void InitGame(void) {
     InitTossScreen();
     InitMenuScreen();
    // Initialize with user not winning toss
+    InitFade(&fade); 
 }
 
 void UpdateGame(){
-     UpdateFade(&fade); 
+      
          switch(currentState){
             case STATE_MENU: UpdateMenuScreen(&currentState); break;
             case STATE_TOSS: UpdateTossScreen(&currentState); break;
@@ -62,7 +63,7 @@ void DrawGame(void) {
                    0.0f,
                    WHITE);
 
-
+        
     switch(currentState){
         case STATE_MENU: DrawMenuScreen(screenWidth,screenHeight); break;
         case STATE_TOSS: DrawTossScreen(screenWidth,screenHeight); break;
@@ -70,7 +71,7 @@ void DrawGame(void) {
         case STATE_PLAY: DrawPlayScreen(); break;
        // case STATE_SUMMARY: DrawSummaryScreen(); break;
     }
-     DrawFade(&fade);
+    
     EndDrawing();
 }
 

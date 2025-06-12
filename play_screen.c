@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <time.h>
+#include "ui_utils.h"
 
 #define NUM_BUTTONS 6
 #define BALLS_PER_INNINGS 6
@@ -28,6 +29,9 @@ static bool isFirstInnings = true;
 static bool matchOver = false;
 
 static const char *screenMessage = NULL;
+static Rectangle scoreBackgroundRect={ 250, 250, 400, 300 };
+
+static Rectangle headingBackgroundRect={ 250, 250, 400, 300 };
 
 void InitButtons() {
     int startX = 100, startY = 500, width = 50, height = 50, gap = 20;
@@ -82,7 +86,14 @@ void InitPlayScreen(bool userBatFirst) {
     userScore = 0;
     computerScore = 0;
     target = 0;
-
+        scoreBackgroundRect.width = GetScreenWidth();
+        scoreBackgroundRect.height = GetScreenWidth()/10.0f;
+        scoreBackgroundRect.x = (GetScreenWidth()-scoreBackgroundRect.width)/2;
+        scoreBackgroundRect.y = 0;
+        headingBackgroundRect.width = GetScreenWidth();
+        headingBackgroundRect.height = GetScreenWidth()/18.0f;
+        headingBackgroundRect.x = scoreBackgroundRect.x;
+        headingBackgroundRect.y = scoreBackgroundRect.y+scoreBackgroundRect.height;
     for (int i = 0; i < BALLS_PER_INNINGS; i++) {
         userBallRecord[i] = 0;
         computerBallRecord[i] = 0;
@@ -99,7 +110,7 @@ void InitPlayScreen(bool userBatFirst) {
         "asset/three.png", // index 3
         "asset/four.png",  // index 4
         "asset/five.png",  // index 5
-        "asset/six .png"   // index 6
+        "asset/six.png"   // index 6
     };
 
     for (int i = 0; i < MAX_HAND_CHOICES; i++) {
@@ -279,7 +290,8 @@ void UpdatePlayScreen(GameState *state) {
 }
 
 void DrawPlayScreen() {
-    ClearBackground(GREEN);
+   DrawHorizontalGradientBox(scoreBackgroundRect, (Color) {23, 41, 97, 255}, (Color){ 60, 21, 95, 255}, 0.0f, (Color){84,24,135,255}) ;
+   DrawHorizontalGradientBox(headingBackgroundRect, (Color) {59, 55, 157, 255}, (Color){ 75, 45, 155, 255}, 0.0f, (Color){84,24,135,255}) ;
     for (int i = 0; i < NUM_BUTTONS; i++) {
         Color color = CheckCollisionPointRec(GetMousePosition(), buttons[i]) ? LIGHTGRAY : DARKGRAY;
         DrawRectangleRec(buttons[i], color);
@@ -298,7 +310,7 @@ void DrawPlayScreen() {
 
     DrawText("Choose your shot (1-6):", 100, 350, 20, DARKBLUE);
     if (screenMessage) DrawText(screenMessage, 100, 300, 20, DARKGRAY);
-
+   
     DrawText(TextFormat("Your Score: %d", userScore), 100, 200, 20, MAROON);
     DrawText(TextFormat("Computer Score: %d", computerScore), 500, 200, 20, BLUE);
     DrawText(TextFormat("Ball: %d / %d", currentBall + 1, BALLS_PER_INNINGS), 100, 250, 20, DARKGRAY);

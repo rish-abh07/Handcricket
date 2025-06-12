@@ -3,7 +3,7 @@
 #include "math.h"
 #include <stdlib.h>
 #include "Montserrat_Fonts.h"
-
+#include "rlgl.h"
 Font montserratTitle;
 Font subHeadLight;
 Font buttonFontMedium;
@@ -73,4 +73,42 @@ void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSi
         btnIconTextCentered(btnText, button.x, button.y, button.width, button.height, fontSize, fontColor, fontType, spacing, icon, offsetX, offsetY);
     }
 }
+#include "ui_utils.h"
 
+void DrawGradientBox(Rectangle rect, Color topColor, Color bottomColor, float borderThickness, Color borderColor) {
+    for (int y = 0; y < rect.height; y++) {
+        float t = (float)y / rect.height;
+
+        Color col = {
+            (unsigned char)(topColor.r + t * (bottomColor.r - topColor.r)),
+            (unsigned char)(topColor.g + t * (bottomColor.g - topColor.g)),
+            (unsigned char)(topColor.b + t * (bottomColor.b - topColor.b)),
+            (unsigned char)(topColor.a + t * (bottomColor.a - topColor.a))
+        };
+
+        DrawRectangle(rect.x, rect.y + y, rect.width, 1, col);
+    }
+
+    if (borderThickness > 0) {
+        DrawRectangleLinesEx(rect, borderThickness, borderColor);
+    }
+}
+
+void DrawHorizontalGradientBox(Rectangle rect, Color leftColor, Color rightColor, float borderThickness, Color borderColor) {
+    for (int x = 0; x < rect.width; x++) {
+        float t = (float)x / rect.width;
+
+        Color col = {
+            (unsigned char)(leftColor.r + t * (rightColor.r - leftColor.r)),
+            (unsigned char)(leftColor.g + t * (rightColor.g - leftColor.g)),
+            (unsigned char)(leftColor.b + t * (rightColor.b - leftColor.b)),
+            (unsigned char)(leftColor.a + t * (rightColor.a - leftColor.a))
+        };
+
+        DrawRectangle(rect.x + x, rect.y, 1, rect.height, col);
+    }
+
+    if (borderThickness > 0) {
+        DrawRectangleLinesEx(rect, borderThickness, borderColor);
+    }
+}
