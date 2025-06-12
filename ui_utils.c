@@ -21,24 +21,39 @@ void UnloadGameFont(){
     UnloadFont(subHeadLight);
     UnloadFont(buttonFontMedium);
 }
+void CenterIconInButton(Texture2D icon, Rectangle button, float iconHeight, float offsetX, float offsetY) {
+    if (icon.id == 0) return;  // Skip drawing if no texture
 
-void btnIconTextCentered(char *btntext, int x, int y, float width, float height,  int fontSize ,Color color, Font fontType, int spacing, Texture2D icon){
+    float iconWidth = iconHeight * ((float)icon.width / icon.height);
+    float x = button.x + (button.width - iconWidth) / 2.0f + offsetX;
+    float y = button.y + (button.height - iconHeight) / 2.0f + offsetY;
+
+    DrawTexturePro(icon,
+                   (Rectangle){ 0, 0, (float)icon.width, (float)icon.height },
+                   (Rectangle){ x, y, iconWidth, iconHeight },
+                   (Vector2){ 0, 0 }, 0.0f, WHITE);
+}
+
+void btnIconTextCentered(char *btntext, int x, int y, float width, float height,  int fontSize ,Color color, Font fontType, int spacing, Texture2D icon , float offsetX, float offsetY){
     float icongap = 10;
     float iconScale = 0.05f;
     Vector2 textSize = MeasureTextEx(fontType,btntext, fontSize, spacing);
-    int textX = x + (width - textSize.x)/2;
-    int textY = y + (height - textSize.y )/2;
+    int textX = x + (width - textSize.x)/2 + offsetX;
+    int textY = y + (height - textSize.y )/2 + offsetY;
     int iconHeight = fontSize;
     int iconWidth = iconHeight *((float)icon.width / icon.height);
     float totalWidth = iconWidth + icongap + textSize.x;
     float startX = x+(width-totalWidth)/2;
     float centerY = y +(height-iconHeight)/2;
-    
-    DrawTexturePro(icon,(Rectangle){ 0, 0, (float)icon.width, (float)icon.height },(Rectangle){ startX, centerY, iconWidth, iconHeight },(Vector2){ 0, 0 }, 0.0f,WHITE);
-    DrawTextEx(fontType,btntext,(Vector2){startX+iconWidth+icongap,  y + (height - textSize.y) / 2}, fontSize, spacing,color);
+    if(icon.id != 0){
+         DrawTexturePro(icon,(Rectangle){ offsetX, offsetY, (float)icon.width, (float)icon.height },(Rectangle){ startX, centerY, iconWidth, iconHeight },(Vector2){ 0, 0 }, 0.0f,WHITE);
+        DrawTextEx(fontType,btntext,(Vector2){startX+iconWidth+icongap,  y + (height - textSize.y) / 2}, fontSize, spacing,color);
+    }else{
+        DrawTextEx(fontType,btntext,(Vector2){textX,  textY}, fontSize, spacing,color);
+    }
 
 }
-void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSize, float hoverScale,char *btnText, Color fontColor, Font fontType, int spacing, Texture2D icon){
+void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSize, float hoverScale,char *btnText, Color fontColor, Font fontType, int spacing, Texture2D icon, float offsetX, float offsetY){
  
       bool isHovered = CheckCollisionPointRec(GetMousePosition(), button);
 
@@ -52,9 +67,10 @@ void hoverSize(Rectangle button, Color normalColor, Color hoverColor, int fontSi
 
     if (isHovered) {
         DrawRectangleRounded((Rectangle){ newX, newY, newWidth, newHeight }, 0.3f, 10, showColor);
-        btnIconTextCentered(btnText, newX, newY, newWidth, newHeight, fontSize, fontColor, fontType,  spacing, icon);
+        btnIconTextCentered(btnText, newX, newY, newWidth, newHeight, fontSize, fontColor, fontType,  spacing, icon, offsetX, offsetY);
     } else {
         DrawRectangleRounded(button, 0.3f, 10, showColor);
-        btnIconTextCentered(btnText, button.x, button.y, button.width, button.height, fontSize, fontColor, fontType, spacing, icon);
+        btnIconTextCentered(btnText, button.x, button.y, button.width, button.height, fontSize, fontColor, fontType, spacing, icon, offsetX, offsetY);
     }
 }
+

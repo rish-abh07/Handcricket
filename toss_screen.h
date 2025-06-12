@@ -4,6 +4,7 @@
 #include "game.h"
 #include "stdlib.h"
 #include "raylib.h"
+
 #include <time.h>
 extern bool isUserWonToss;
 extern bool isComputerTurn;

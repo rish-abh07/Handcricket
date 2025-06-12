@@ -5,6 +5,7 @@
 #include "globalsVar.h"
 #include "math.h"
 #include "menu_screen.h"
+#include "fade.h"
 
 #include "ui_utils.h"
 #include <stdlib.h>
@@ -29,7 +30,8 @@ void InitGame(void) {
    // Initialize with user not winning toss
 }
 
-    void UpdateGame(){
+void UpdateGame(){
+     UpdateFade(&fade); 
          switch(currentState){
             case STATE_MENU: UpdateMenuScreen(&currentState); break;
             case STATE_TOSS: UpdateTossScreen(&currentState); break;
@@ -68,7 +70,7 @@ void DrawGame(void) {
         case STATE_PLAY: DrawPlayScreen(); break;
        // case STATE_SUMMARY: DrawSummaryScreen(); break;
     }
-
+     DrawFade(&fade);
     EndDrawing();
 }
 

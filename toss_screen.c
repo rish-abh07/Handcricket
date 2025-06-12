@@ -76,7 +76,7 @@ void UpdateTossScreen(GameState* state) {
             isAnimating = true;
             animationTime = 0.0f;
             coinAngle = 0.0f;
-        } else if (CheckCollisionPointRec(mousePos, HeadBtn)) {
+        } else if (CheckCollisionPointRec(mousePos, TailBtn)) {
             userChoiceText = "You chose Tails";
             isAnimating = true;
             animationTime = 0.0f;
@@ -102,7 +102,7 @@ void UpdateTossScreen(GameState* state) {
         }
     }
 
-    if (tossDone && IsKeyPressed(KEY_ENTER)) {
+    if (tossDone && CheckCollisionPointRec(mousePos, contBtn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
          if(isUserWonToss){
         InitChooseBatBall(false); // User won toss, they choose Bat or Ball
         }
@@ -208,6 +208,6 @@ void DrawTossScreen(int screenWidth, int screenHeight) {
 
 
     }
-    hoverSize(HeadBtn, headColor,hoverHead, 20, 1.2f, "Head", WHITE, buttonFontMedium, 0, headIcon);
-    hoverSize(TailBtn, tailsColor,hoverTail, 20, 1.2f, "Tail", WHITE, buttonFontMedium, 0, tailIcon);
+    hoverSize(HeadBtn, headColor,hoverHead, 20, 1.2f, "Head", WHITE, buttonFontMedium, 0, headIcon, 0, 0);
+    hoverSize(TailBtn, tailsColor,hoverTail, 20, 1.2f, "Tail", WHITE, buttonFontMedium, 0, tailIcon, 0, 0);
 }

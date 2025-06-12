@@ -75,10 +75,10 @@ void DrawMenuScreen(int screenWidth, int screenHeight)
     DrawTextEx(subHeadLight,"The Ultimate Finger Game",(Vector2){ subHeadX, titlePosition.y + 50}, 20,0, YELLOW);
 
 
-    hoverSize(startButton, startButtonColor,hoverStart, 20, 1.2f,"NEW GAME", WHITE, buttonFontMedium, 0, menuIcon.play);
-    hoverSize(leaderBoardButton, leaderBoardButtonColor,hoverLeader, 20,1.2f, "LEADERBOARD", WHITE, buttonFontMedium,0,menuIcon.leaderboard);
-    hoverSize(settingButton, settingButtonColor,hoverSetting, 20, 1.2f, "SETTING", WHITE, buttonFontMedium,0, menuIcon.settings);
-    hoverSize(howToPlayButton, howToPlayButtonColor,hoverExit, 20, 1.2f, "HOW TO PLAY", WHITE, buttonFontMedium,0, menuIcon.howToPlay);
+    hoverSize(startButton, startButtonColor,hoverStart, 20, 1.2f,"NEW GAME", WHITE, buttonFontMedium, 0, menuIcon.play, 0, 0);
+    hoverSize(leaderBoardButton, leaderBoardButtonColor,hoverLeader, 20,1.2f, "LEADERBOARD", WHITE, buttonFontMedium,0,menuIcon.leaderboard, 0, 0);
+    hoverSize(settingButton, settingButtonColor,hoverSetting, 20, 1.2f, "SETTING", WHITE, buttonFontMedium,0, menuIcon.settings, 0, 0);
+    hoverSize(howToPlayButton, howToPlayButtonColor,hoverExit, 20, 1.2f, "HOW TO PLAY", WHITE, buttonFontMedium,0, menuIcon.howToPlay,  0, 0);
 }
 void UnloadMenuScreen() {
    
