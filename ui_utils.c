@@ -112,3 +112,9 @@ void DrawHorizontalGradientBox(Rectangle rect, Color leftColor, Color rightColor
         DrawRectangleLinesEx(rect, borderThickness, borderColor);
     }
 }
+Vector2 TextCentrPos(char *text, Font fonttype, Rectangle rec, int size, int spacing,float posoffsetX, float posoffsety,Color fontColor){
+         Vector2 textSize= MeasureTextEx(fonttype,text, size, spacing);
+        int textX = rec.x + (rec.width - textSize.x)/2 + posoffsetX;
+        int textY = rec.x + (rec.height - textSize.y)/2 + posoffsety;
+        return (Vector2){textX,textY};
+}
