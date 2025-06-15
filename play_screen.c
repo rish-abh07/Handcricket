@@ -4,6 +4,7 @@
 #include <time.h>
 #include "ui_utils.h"
 #include "Montserrat_Fonts.h"
+#include "math.h"
 #define NUM_BUTTONS 6
 #define BALLS_PER_INNINGS 6
 #define MAX_HAND_CHOICES 7 // 1-6 + 0
@@ -147,15 +148,16 @@ void InitPlayScreen(bool userBatFirst) {
     homeIcon = LoadTexture("asset/home.png");
 
     for (int i = 0; i < MAX_HAND_CHOICES; i++) {
-        handTextures[i] = LoadTexture(textureFiles[i]);
+        handTextures[i] = LoadCircularTexture(textureFiles[i]);
     }
-
+    handTextures[0] = LoadCircularTexture(textureFiles[0]);
     currentUserHand = &handTextures[0];
     currentComputerHand = &handTextures[0];
     if (handTextures[0].id == 0) {
         TraceLog(LOG_ERROR, "Failed to load hand textures!");
     }    
 }
+
 
 void ballRecordReset(int *record, int size) {
     for (int i = 0; i < size; i++) {
@@ -365,7 +367,7 @@ void DrawPlayScreen() {
     }
     if (showWicketPopup) {
     const char* wicketText = "WICKET!";
-    int fontSize = 60;
+    int fontSize = 40;
     int textWidth = MeasureText(wicketText, fontSize);
     Vector2 center = { GetScreenWidth()/2.0f - textWidth/2.0f, GetScreenHeight()/2.0f - fontSize/2.0f };
     
@@ -380,11 +382,29 @@ void DrawPlayScreen() {
         Vector2 textPos = TextCentrPos("Target:%d",buttonFontMedium,scoreBackgroundRect,20,0,0,+35,WHITE);
         DrawTextEx(buttonFontMedium, TextFormat("Target: %d",target), textPos, 20, 0, WHITE);
     }
-    int spacing = 100;
-    int handY = GetScreenHeight() / 2;
-    if (currentUserHand) DrawTexture(*currentUserHand, GetScreenWidth()/4 - currentUserHand->width/2, handY, WHITE);
-    if (currentComputerHand) DrawTexture(*currentComputerHand, GetScreenWidth()*3/4 - currentComputerHand->width/2, handY, WHITE);
-    DrawAndHandleBackToHomeButton(STATE_MENU);
+     int spacing = 100;
+    int handY = (buttons[0].y - currentUserHand->height) / 2 + currentUserHand->height/1.5;
+
+    if (currentUserHand) {
+        int userX = GetScreenWidth() / 4.5 - currentUserHand->width / 2;
+        int userCenterX = userX + currentUserHand->width / 2;
+        int centerY = handY + currentUserHand->height / 2;
+
+        DrawCircle(userCenterX, centerY, currentUserHand->width / 1.5, RED);
+        DrawTexture(*currentUserHand, userX, handY, WHITE);
+    }
+
+    if (currentComputerHand) {
+        int compX = GetScreenWidth() * .78 - currentComputerHand->width / 2;
+        int compCenterX = compX + currentComputerHand->width / 2;
+        int centerY = handY + currentComputerHand->height / 2;
+
+        DrawCircle(compCenterX, centerY, currentComputerHand->width / 1.5, BLUE);
+        DrawTexture(*currentComputerHand, compX, handY, WHITE);
+    }
+
+DrawAndHandleBackToHomeButton(STATE_MENU);
+
 }
 
 

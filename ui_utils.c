@@ -118,3 +118,46 @@ Vector2 TextCentrPos(char *text, Font fonttype, Rectangle rec, int size, int spa
         int textY = rec.x + (rec.height - textSize.y)/2 + posoffsety;
         return (Vector2){textX,textY};
 }
+#include "raylib.h"
+#include <math.h>
+
+Texture2D LoadCircularTexture(const char *path) {
+    Image img = LoadImage(path);
+    ImageResize(&img, 150, 150);
+
+    int width = img.width;
+    int height = img.height;
+    Vector2 center = { width / 2.0f, height / 2.0f };
+    int radius = width / 1.5;
+
+    Color *pixels = LoadImageColors(img);
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            float dx = x - center.x;
+            float dy = y - center.y;
+            float distSq = dx * dx + dy * dy;
+
+            if (distSq > radius * radius) {
+                pixels[y * width + x].a = 0; // Make pixel transparent
+            }
+        }
+    }
+
+    // ✅ Manual Image struct (instead of LoadImageEx)
+    Image newImg = {
+        .data = pixels,
+        .width = width,
+        .height = height,
+        .mipmaps = 1,
+        .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8
+    };
+
+    Texture2D texture = LoadTextureFromImage(newImg);
+
+    // ⚠️ DO NOT call UnloadImageColors(pixels) — data is owned by newImg
+    UnloadImage(img);
+    UnloadImage(newImg); // this will free `pixels` too
+
+    return texture;
+}
