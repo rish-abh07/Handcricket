@@ -3,14 +3,14 @@
 A fully playable Hand Cricket game built in **C** using **Raylib**, compiled to the **web** using **Emscripten**. This project recreates the nostalgic childhood game of Hand Cricket with animations, sound, score tracking, and full match flow — all inside the browser!
 
 ## 🚀 Demo
-👉 [Play Now on Netlify](https://your-netlify-url.netlify.app)
+👉 [Play Now on Netlify](https://handcricketr.netlify.app/)
 
 ## 🎮 Features
 - Full match flow: Toss → Innings → Game Over
 - User vs Computer logic
 - Number selection (1–6)
 - Wicket, run, and over tracking
-- Responsive gradient UI with hover effects
+- Responsive gradient UI with hover effectsad
 - Fade transitions between screens
 - Match summary and restart functionality
 - Google Montserrat font integration
