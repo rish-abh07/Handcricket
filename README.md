@@ -1,74 +1,77 @@
-
 # 🏏 Hand Cricket Game – Web Version (C + Raylib + Emscripten)
 
-A fully playable Hand Cricket game built in **C** using **Raylib**, compiled to the **Web** using **Emscripten**. This project recreates the childhood game of Hand Cricket with animations, UI, score tracking, and complete match flow—all running in the browser!
+A fully playable Hand Cricket game built in **C** using **Raylib**, compiled to the **web** using **Emscripten**. This project recreates the nostalgic childhood game of Hand Cricket with animations, sound, score tracking, and full match flow — all inside the browser!
 
 ## 🚀 Demo
 👉 [Play Now on Netlify](https://your-netlify-url.netlify.app)
 
 ## 🎮 Features
-- Full Toss → Innings → Game Over flow
-- User vs Computer input system
-- 1–6 Button selection
-- Wicket, runs, overs, and scoring logic
-- Gradient UI and hover effects
-- Smooth fade transitions between screens
-- Match summary and restart feature
-- Responsive canvas layout
-- Uses Google Montserrat font
+- Full match flow: Toss → Innings → Game Over
+- User vs Computer logic
+- Number selection (1–6)
+- Wicket, run, and over tracking
+- Responsive gradient UI with hover effects
+- Fade transitions between screens
+- Match summary and restart functionality
+- Google Montserrat font integration
 
 ## 📚 What I Learned
 
-> This project was a big milestone in my learning journey.
+> This project marks a big milestone in my learning journey.
 
-### 🔧 Technical Concepts
-- Modular **C programming** with header/source files
-- Real-time UI/UX with Raylib
-- Game loop and state machine handling
-- Texture loading and responsive layouts
-- Compilation to WebAssembly using **Emscripten**
-- Debugging JavaScript glue code
-- Hosting and CI/CD using **Netlify**
+I started this project to learn C with a practical purpose. Coming from a game development background, I wanted to move away from Unity and try building something from scratch. Inspired by Zomato's ZPL, I initially created a terminal-based version and later moved to a full graphical game using Raylib.
 
-### 💡 Web Dev Skills
-- Writing minimal HTML for canvas games
-- Responsive design with media queries and canvas scaling
-- Adding Google AdSense code
-- Connecting GitHub repo with Netlify for auto-deploy
+I chose **Raylib** over SDL2 for its simplicity and clarity. Although the project is still evolving, it helped me learn end-to-end game development — from raw C to WebAssembly and deployment.
+
+### 🔧 Technical Learnings
+- Modular C with header/source structure
+- Game loop and screen state handling
+- Texture rendering and animation with Raylib
+- Compiling C to WebAssembly using Emscripten
+- Deploying via GitHub + Netlify CI/CD
+- Debugging browser-side JS/C integrations
+
+### 💡 Web Dev Learnings
+- Building a responsive canvas layout
+- Adding Google AdSense
+- Hosting with Netlify
+- Writing clean HTML/CSS for native apps
 
 ## 🧠 Future Plans
-- Add sound effects and background music
-- Improve wicket/bowled out animations
-- Add multiplayer (local hotseat)
-- Save high scores using localStorage or backend
-- Display gameplay statistics
+- Add sound effects & ambient music
+- Wicket animations (bowled out, catch, etc.)
+- Multiplayer (hotseat)
+- Save scores using localStorage or backend
+- Gameplay stats dashboard
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose                     |
-|------------|-----------------------------|
-| C          | Core game logic             |
-| Raylib     | Graphics, input, sound      |
-| Emscripten | Compile to WebAssembly      |
-| HTML/CSS   | UI Shell for canvas         |
-| JavaScript | Game loading & AdSense      |
-| Netlify    | Web hosting                 |
-
+| Technology | Usage                      |
+|------------|----------------------------|
+| C          | Core game logic            |
+| Raylib     | Graphics, input handling   |
+| Emscripten | C to WebAssembly compiler  |
+| HTML/CSS   | UI Shell for the canvas    |
+| JavaScript | Glue code, AdSense, errors |
+| Netlify    | Hosting and CI/CD          |
 
 ## 🙌 Acknowledgements
 
-- Huge thanks to the **Raylib** community for such a beginner-friendly graphics library.
-- Shoutout to **Emscripten** for bridging native C with the Web.
-- Thanks to **Netlify** for making free, fast hosting a breeze.
-- **Big thanks to [ChatGPT](https://chat.openai.com/)** for guiding me through C logic, WebAssembly setup, Netlify deployment, UI design, and more — all in real-time!
+- 👨‍💻 The amazing **Raylib** community
+- 🧩 **Emscripten** for enabling native-to-web conversion
+- 🌐 **Netlify** for seamless free hosting
+- 🤖 Special thanks to **[ChatGPT](https://chat.openai.com/)** for:
+  - Explaining C and game logic
+  - Setting up Emscripten
+  - Helping with UI/UX
+  - Automating deployment and debugging tips
 
 ## 📬 Contact
-**Made by:** Rishabh Pal 
+
+**Created by:** Rishabh Pal  
 **GitHub:** [@rish-abh07](https://github.com/rish-abh07)  
-**Twitter/X:** [@rishabhpal25](https://x.com/rishabhpal25?t=L8FnRJGOxaXF8sbON4StyQ&s=09)
+**Twitter/X:** [@rishabhpal25](https://x.com/rishabhpal25)
 
 ---
 
-
-
-
+⭐️ *If you enjoyed this project, please star the repo and share it!*
