@@ -22,10 +22,11 @@ void InitSummaryScreen(const char *msg, int uScore, int cScore) {
     strncpy(summaryMessage, msg, sizeof(summaryMessage));
     summaryMessage[sizeof(summaryMessage) - 1] = '\0';  // Ensure null termination
     smsg = summaryMessage;
-    // Use global variables so they can be shared across files
+
     playerScore = uScore;
     compScore = cScore;
 
+#ifndef __EMSCRIPTEN__
     HighScoreEntry saved = LoadHighScore();
     if (playerScore > saved.score) {
         isAwaitingNameInput = true;
@@ -33,6 +34,9 @@ void InitSummaryScreen(const char *msg, int uScore, int cScore) {
     } else {
         isAwaitingNameInput = false;
     }
+#else
+    isAwaitingNameInput = false;
+#endif
 }
 
 // Called every frame
@@ -54,11 +58,13 @@ void UpdateSummaryScreen(GameState *state) {
         }
 
         if (IsKeyPressed(KEY_ENTER) && strlen(playerName) > 0) {
+#ifndef __EMSCRIPTEN__
             SaveHighScore(playerScore, playerName);
+#endif
             isAwaitingNameInput = false;
         }
 
-        return; // Skip main menu button check while typing
+        return; // Skip button check while typing
     }
 
     Vector2 mouse = GetMousePosition();
@@ -71,6 +77,10 @@ void UpdateSummaryScreen(GameState *state) {
 
 // Called every frame
 void DrawSummaryScreen(void) {
+#ifdef __EMSCRIPTEN__
+    printf("Drawing Summary Screen - Web mode\n");
+#endif
+
     DrawTextEx(montserratTitle, "MATCH SUMMARY", 
         (Vector2){ screenWidth / 2 - 150, 50 }, 40, 1, YELLOW);
 
@@ -93,9 +103,13 @@ void DrawSummaryScreen(void) {
         DrawRectangleLines(100, 340, 300, 40, WHITE);
         DrawText(playerName, 110, 350, 20, GREEN);
     } else {
+#ifndef __EMSCRIPTEN__
         HighScoreEntry high = LoadHighScore();
         DrawText(TextFormat("High Score: %s - %d", high.name, high.score),
                  100, 300, 30, YELLOW);
+#else
+        DrawText("High Score: (Disabled on Web)", 100, 300, 30, GRAY);
+#endif
 
         DrawRectangleRounded(
             (Rectangle){ screenWidth / 2 - 75, screenHeight - 100, 150, 40 }, 
