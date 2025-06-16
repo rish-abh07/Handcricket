@@ -40,7 +40,13 @@ void InitChooseBatBall(bool isComputerTurn) {
         computerChoice = NULL;
         choiceDone = false;
     } else {
+       computerTurn = false;  // ✅ ← ADD THIS
         choiceText = "Choose Bat or Ball";
+        isChoiceAnimating = false;
+        choiceAnimationTime = 0.0f;
+        animationHighlightToggle = 0;
+        computerChoice = NULL;
+        choiceDone = false;
     }
 
     batTexture = LoadTexture("asset/bat.png");

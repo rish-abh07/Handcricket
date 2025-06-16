@@ -5,7 +5,7 @@
 #include "ui_utils.h"
 #include <stdlib.h>
 #include "game.h"
-
+#include "toss_screen.h"
 float buttonWidth = 300;
 float buttonHeight = 40;
 int buttonGap = 20;
@@ -41,8 +41,9 @@ void UpdateMenuScreen(GameState *state)
     Vector2 mouse = GetMousePosition();
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         if (CheckCollisionPointRec(mouse, startButton)) {
-
+            InitTossScreen();
             *state = STATE_TOSS; // Transition to toss state
+            
 
         } else if (CheckCollisionPointRec(mouse, howToPlayButton)) {
             CloseWindow(); // Exit the game

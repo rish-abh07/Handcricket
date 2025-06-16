@@ -2,12 +2,17 @@
 #include "raylib.h"
 #include "math.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "Montserrat_Fonts.h"
+#include "globalsVar.h"
 #include "rlgl.h"
 Font montserratTitle;
 Font subHeadLight;
 Font buttonFontMedium;
 
+
+bool isTypingName = false;
 void LoadGameFont(){
      montserratTitle = LoadFontFromMemory(".otf",Montserrat_ExtraBold_otf, Montserrat_ExtraBold_otf_len, 40, NULL, 0);
      SetTextureFilter(montserratTitle.texture, TEXTURE_FILTER_POINT);
@@ -160,4 +165,26 @@ Texture2D LoadCircularTexture(const char *path) {
     UnloadImage(newImg); // this will free `pixels` too
 
     return texture;
+}
+HighScoreEntry LoadHighScore() {
+    HighScoreEntry entry = {0, "None"};
+    FILE *file = fopen("highscore.dat", "rb");
+    if (file != NULL) {
+        fread(&entry, sizeof(HighScoreEntry), 1, file);
+        fclose(file);
+    }
+    return entry;
+}
+
+void SaveHighScore(int score, const char *name) {
+    HighScoreEntry entry;
+    entry.score = score;
+    strncpy(entry.name, name, sizeof(entry.name));
+    entry.name[sizeof(entry.name) - 1] = '\0'; // ensure null-termination
+
+    FILE *file = fopen("highscore.dat", "wb");
+    if (file != NULL) {
+        fwrite(&entry, sizeof(HighScoreEntry), 1, file);
+        fclose(file);
+    }
 }

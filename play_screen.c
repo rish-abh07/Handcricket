@@ -5,6 +5,7 @@
 #include "ui_utils.h"
 #include "Montserrat_Fonts.h"
 #include "math.h"
+#include "summary_screen.h"
 #define NUM_BUTTONS 6
 #define BALLS_PER_INNINGS 6
 #define MAX_HAND_CHOICES 7 // 1-6 + 0
@@ -12,6 +13,9 @@ static Texture2D homeIcon ;
 static Texture2D handTextures[MAX_HAND_CHOICES]; // 0 to 6
 static Texture2D *currentUserHand = NULL;
 static Texture2D *currentComputerHand = NULL;
+
+int userInnings1Score = 0;
+int computerInnings1Score = 0;
 
 
 Rectangle buttons[NUM_BUTTONS];
@@ -40,6 +44,9 @@ static Rectangle headingBackgroundRect={ 250, 250, 400, 300 };
 static bool showWicketPopup = false;
 static float wicketPopupTimer = 0.0f;
 const float WICKET_POPUP_DURATION = 1.5f;  // seconds
+  Rectangle backButton = {
+       0,0,0,0
+    };
 
 void InitButtons() {
     int width = 50, height = 50, gap = 20;
@@ -71,15 +78,12 @@ void InitComputerChoiceRecord() {
         computerChoiceRecord[i] = (Rectangle){ startX + i * (width + gap), startY, width, height };
     }
 }
-void DrawAndHandleBackToHomeButton(GameState *state) {
-    Rectangle backButton = {
-        .x =(GetScreenWidth() - 100) / 2,
-        .y = GetScreenHeight() - 75,
-        .width = 100,
-        .height = 40
-    };
+void DrawAndHandleBackToHomeButton() {
+  
 
     hoverSize( backButton, DARKGRAY, LIGHTGRAY, 20, 1.2f, "MENU", WHITE, buttonFontMedium, 0, homeIcon, 0,0);
+   
+    
 }
 
 
@@ -156,6 +160,10 @@ void InitPlayScreen(bool userBatFirst) {
     if (handTextures[0].id == 0) {
         TraceLog(LOG_ERROR, "Failed to load hand textures!");
     }    
+         backButton.x =(GetScreenWidth() - 100) / 2;
+                 backButton.y = GetScreenHeight() - 75;
+        backButton.width = 100;
+        backButton.height = 40;
 }
 
 
@@ -184,14 +192,15 @@ void HandleUserChoice(int userChoice) {
                 isUserBatting = false;
                 isFirstInnings = false;
                 target = userScore;
-
+                userInnings1Score = userScore;
+          
                 currentBall = 0;
                 ballRecordReset(userBallRecord, BALLS_PER_INNINGS);
                 ballRecordReset(computerBallRecord, BALLS_PER_INNINGS);
 
                 userScore = 0;
                 computerScore = 0;
-
+               
                 currentUserHand = &handTextures[0];
                 currentComputerHand = &handTextures[0];
             } else {
@@ -207,9 +216,10 @@ void HandleUserChoice(int userChoice) {
 
         // Check for win if chasing
         if (!isFirstInnings && userScore > target) {
-            screenMessage = "You Win!";
-            matchOver = true;
-            return;
+           screenMessage = "You Win!";
+             InitSummaryScreen(screenMessage, userScore, computerInnings1Score);
+              matchOver = true;
+             return;
         }
 
         currentBall++;
@@ -220,7 +230,7 @@ void HandleUserChoice(int userChoice) {
                 isUserBatting = false;
                 isFirstInnings = false;
                 target = userScore;
-
+                userInnings1Score = userScore;
                 currentBall = 0;
                 ballRecordReset(userBallRecord, BALLS_PER_INNINGS);
                 ballRecordReset(computerBallRecord, BALLS_PER_INNINGS);
@@ -234,10 +244,13 @@ void HandleUserChoice(int userChoice) {
                 // Second innings ends, decide winner
                 if (userScore == target) {
                     screenMessage = "Match Tied!";
+                    InitSummaryScreen(screenMessage,userScore,computerInnings1Score);
                 } else if (userScore > target) {
                     screenMessage = "You Win!";
+                    InitSummaryScreen(screenMessage,userScore,computerInnings1Score);
                 } else {
                     screenMessage = "Computer Wins!";
+                     InitSummaryScreen(screenMessage,userScore,computerInnings1Score);
                 }
                 matchOver = true;
             }
@@ -255,7 +268,7 @@ void HandleUserChoice(int userChoice) {
                 isUserBatting = true;
                 isFirstInnings = false;
                 target = computerScore;
-
+                computerInnings1Score = computerScore;
                 currentBall = 0;
                 ballRecordReset(userBallRecord, BALLS_PER_INNINGS);
                 ballRecordReset(computerBallRecord, BALLS_PER_INNINGS);
@@ -277,8 +290,9 @@ void HandleUserChoice(int userChoice) {
         // Check for win if chasing
         if (!isFirstInnings && computerScore > target) {
             screenMessage = "Computer Wins!";
-            matchOver = true;
-            return;
+              InitSummaryScreen(screenMessage, userInnings1Score, computerScore);
+              matchOver = true;
+             return;
         }
 
         currentBall++;
@@ -302,11 +316,15 @@ void HandleUserChoice(int userChoice) {
             } else {
                 // Second innings ends, decide winner
                 if (computerScore == target) {
+                   
                     screenMessage = "Match Tied!";
+                    InitSummaryScreen(screenMessage,userInnings1Score,computerScore);
                 } else if (computerScore > target) {
                     screenMessage = "Computer Wins!";
+                    InitSummaryScreen(screenMessage,userInnings1Score,computerScore);
                 } else {
                     screenMessage = "You Win!";
+                    InitSummaryScreen(screenMessage,userInnings1Score,computerScore);
                 }
                 matchOver = true;
             }
@@ -321,7 +339,10 @@ void UpdatePlayScreen(GameState *state) {
             showWicketPopup = false;
         }
     }
-    if (matchOver) return;
+     if (matchOver && !showWicketPopup) {
+    *state = STATE_SUMMARY;
+    return;
+}
 
     Vector2 mousePos = GetMousePosition();
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -331,7 +352,14 @@ void UpdatePlayScreen(GameState *state) {
                 break;
             }
         }
+        if(CheckCollisionPointRec(GetMousePosition(),backButton)){
+             *state = STATE_MENU;
+        }
     }
+   
+    
+ 
+    
 }
 
 void DrawPlayScreen() {
@@ -403,7 +431,7 @@ void DrawPlayScreen() {
         DrawTexture(*currentComputerHand, compX, handY, WHITE);
     }
 
-DrawAndHandleBackToHomeButton(STATE_MENU);
+DrawAndHandleBackToHomeButton();
 
 }
 

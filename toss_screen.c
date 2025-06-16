@@ -33,12 +33,15 @@ Color smallBackgroundRectColor = (Color){104, 50, 146, 255};
 static Texture2D headIcon;
 static Texture2D tailIcon; 
 void InitTossScreen(void) {
-    headIcon = LoadTexture("asset/head.png");
-    tailIcon = LoadTexture("asset/tail.png");
+  headIcon = LoadTexture("asset/Head.png");
+tailIcon = LoadTexture("asset/Tail.png");
     coinRadius = 0.1*GetScreenHeight();
     int gap = 0.020 * GetScreenWidth();
     tossDone = false;
     tossResult = -1;
+    isUserWonToss = false;
+    isComputerTurn= false;
+       userChoiceText = NULL; 
     //uilogic
     smallBackgroundRect.width = GetScreenWidth()/2.5;
     smallBackgroundRect.height = GetScreenHeight()/2.5;
@@ -69,7 +72,7 @@ void UpdateTossScreen(GameState* state) {
     Vector2 mousePos = GetMousePosition();
 
     if (!tossDone && !isAnimating && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-       Vector2 mousePos = GetMousePosition();
+       
 
         if (CheckCollisionPointRec(mousePos, HeadBtn)) {
             userChoiceText = "You chose Heads";

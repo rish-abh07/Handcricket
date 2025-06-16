@@ -6,7 +6,7 @@
 #include "math.h"
 #include "menu_screen.h"
 #include "fade.h"
-
+#include "summary_screen.h"
 #include "ui_utils.h"
 #include <stdlib.h>
 //#include "summary screen.h"
@@ -38,7 +38,7 @@ void UpdateGame(){
             case STATE_TOSS: UpdateTossScreen(&currentState); break;
             case STATE_BAT_BOWL: UpdateChooseBatBall(&currentState); break;
            case STATE_PLAY: UpdatePlayScreen(&currentState); break;
-           // case STATE_SUMMARY: UpdateSummaryScreen(&currentState); break;
+            case STATE_SUMMARY: UpdateSummaryScreen(&currentState); break;
     }
 }
 
@@ -69,7 +69,7 @@ void DrawGame(void) {
         case STATE_TOSS: DrawTossScreen(screenWidth,screenHeight); break;
         case STATE_BAT_BOWL:    DrawChooseBatBallScreen(); break;
         case STATE_PLAY: DrawPlayScreen(); break;
-       // case STATE_SUMMARY: DrawSummaryScreen(); break;
+       case STATE_SUMMARY: DrawSummaryScreen(); break;
     }
     
     EndDrawing();
